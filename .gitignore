@@ -1,0 +1,19 @@
+# Java and Maven
+target/
+*.log
+*.class
+*.jar
+*.war
+*.ear
+
+# IDE files
+.vscode/
+.idea/
+*.iml
+
+# Firebase credentials
+src/main/resources/firebase/firebase-service-account.json
+src/main/resources/firebase/*.json
+
+# Environment variables file
+.env

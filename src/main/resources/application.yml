@@ -1,0 +1,61 @@
+spring:
+  application:
+    name: vendorr-backend
+
+  spring:
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.H2Dialect
+    show-sql: false
+    open-in-view: false
+
+  security:
+    jwt:
+      secret: ${JWT_SECRET:your-very-secure-and-long-secret-key-at-least-32chars}
+      expiration: 86400000
+
+  server:
+    port: 8080
+    servlet:
+      context-path: /api/v1
+    compression:
+      enabled: true
+      mime-types: application/json,application/xml,text/html,text/xml,text/plain
+      min-response-size: 1024
+    error:
+      include-message: always
+      include-binding-errors: always
+      include-stacktrace: never
+      include-exception: false
+
+  management:
+    endpoints:
+      web:
+        exposure:
+          include: health,info
+    endpoint:
+      health:
+        show-details: when_authorized
+
+firebase:
+  credentials-file: ${FIREBASE_CREDENTIALS:classpath:C:\dev\Vendor\Vendorr backend\src\main\resources\firebase\vendorr-43a00-firebase-adminsdk-fbsvc-6798caab7d.json
+  database-url: ${FIREBASE_DATABASE_URL:https://vendorr-app.firebaseio.com}
+
+logging:
+  level:
+    root: INFO
+    com.vendorr: DEBUG
+    org.springframework.web: INFO
+    org.springframework.security: INFO
+    org.hibernate: INFO
