@@ -16,16 +16,16 @@ public interface UserDeviceTokenRepository extends JpaRepository<UserDeviceToken
     
     Optional<UserDeviceToken> findByToken(String token);
     
-    List<UserDeviceToken> findByUserId(String userId);
+    List<UserDeviceToken> findByUser_Id(String userId);
     
-    boolean existsByTokenAndUserId(String token, String userId);
+    boolean existsByTokenAndUser_Id(String token, String userId);
     
     @Modifying
     @Query("DELETE FROM UserDeviceToken t WHERE t.token = :token")
     void deleteByToken(@Param("token") String token);
     
     @Modifying
-    @Query("DELETE FROM UserDeviceToken t WHERE t.userId = :userId")
+    @Query("DELETE FROM UserDeviceToken t WHERE t.user.id = :userId")
     void deleteAllByUserId(@Param("userId") String userId);
     
     @Query("SELECT t FROM UserDeviceToken t WHERE t.lastUsed < :threshold")

@@ -1,12 +1,12 @@
 package com.vendorr.config;
 
+import io.github.cdimascio.dotenv.Dotenv;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -20,17 +20,35 @@ import java.util.function.Function;
 @RequiredArgsConstructor
 public class JwtConfig {
 
-    @Value("${spring.security.jwt.secret}")
+    private final Dotenv dotenv;
+
     private String secret;
 
-    @Value("${spring.security.jwt.expiration}")
     private Long expiration;
 
     private Key key;
 
     @PostConstruct
     public void init() {
+        this.secret = dotenv.get("APP_JWT_SECRET");
+        this.expiration = Long.parseLong(dotenv.get("APP_JWT_EXPIRATION", "86400000"));
         this.key = Keys.hmacShaKeyFor(secret.getBytes());
+    }
+
+    public String getJwtSecret() {
+        return secret;
+    }
+
+    public Long getJwtExpiration() {
+        return expiration;
+    }
+
+    public Long getRefreshExpiration() {
+        return Long.parseLong(dotenv.get("APP_JWT_REFRESH_EXPIRATION", "604800000"));
+    }
+
+    public Long getResetExpiration() {
+        return Long.parseLong(dotenv.get("APP_JWT_RESET_EXPIRATION", "3600000"));
     }
 
     public String generateToken(UserDetails userDetails, String userId) {

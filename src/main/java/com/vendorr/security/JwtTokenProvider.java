@@ -1,11 +1,11 @@
 package com.vendorr.security;
 
+import com.vendorr.config.JwtConfig;
 import com.vendorr.model.entity.User;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
@@ -20,23 +20,17 @@ import java.util.function.Function;
 @Component
 public class JwtTokenProvider {
 
-    @Value("${app.jwt.secret}")
-    private String jwtSecret;
-
-    @Value("${app.jwt.expiration}")
-    private long jwtExpiration;
-
-    @Value("${app.jwt.refresh-expiration}")
-    private long refreshExpiration;
-
-    @Value("${app.jwt.reset-expiration}")
-    private long resetExpiration;
+    private final JwtConfig jwtConfig;
 
     private SecretKey key;
 
+    public JwtTokenProvider(JwtConfig jwtConfig) {
+        this.jwtConfig = jwtConfig;
+    }
+
     @PostConstruct
     public void init() {
-        this.key = Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
+        this.key = Keys.hmacShaKeyFor(jwtConfig.getJwtSecret().getBytes(StandardCharsets.UTF_8));
     }
 
     private SecretKey getSigningKey() {
@@ -45,7 +39,7 @@ public class JwtTokenProvider {
 
     public String generateToken(User user) {
         Date now = new Date();
-        Date expiryDate = new Date(now.getTime() + jwtExpiration);
+        Date expiryDate = new Date(now.getTime() + jwtConfig.getJwtExpiration());
 
         Map<String, Object> claims = new HashMap<>();
         claims.put("userId", user.getId());
@@ -62,7 +56,7 @@ public class JwtTokenProvider {
 
     public String generateRefreshToken(User user) {
         Date now = new Date();
-        Date expiryDate = new Date(now.getTime() + refreshExpiration);
+        Date expiryDate = new Date(now.getTime() + jwtConfig.getRefreshExpiration());
 
         return Jwts.builder()
                 .setSubject(user.getEmail())
@@ -75,7 +69,7 @@ public class JwtTokenProvider {
 
     public String generatePasswordResetToken(User user) {
         Date now = new Date();
-        Date expiryDate = new Date(now.getTime() + resetExpiration);
+        Date expiryDate = new Date(now.getTime() + jwtConfig.getResetExpiration());
 
         return Jwts.builder()
                 .setSubject(user.getEmail())

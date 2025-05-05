@@ -49,8 +49,8 @@ spring:
         show-details: when_authorized
 
 firebase:
-  credentials-file: ${FIREBASE_CREDENTIALS:classpath:C:\dev\Vendor\Vendorr backend\src\main\resources\firebase\vendorr-43a00-firebase-adminsdk-fbsvc-6798caab7d.json
-  database-url: ${FIREBASE_DATABASE_URL:https://vendorr-app.firebaseio.com}
+  credentials-file: classpath:firebase/vendorr-43a00-firebase-adminsdk-fbsvc-6798caab7d.json
+  database-url: https://vendorr-app.firebaseio.com
 
 logging:
   level:

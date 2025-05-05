@@ -26,7 +26,7 @@ public interface PaymentRepository extends JpaRepository<Payment, String> {
             @Param("status") Payment.PaymentStatus status,
             @Param("timeout") LocalDateTime timeout);
     
-    @Query("SELECT p FROM Payment p WHERE p.order.userId = :userId AND p.status = :status")
+    @Query("SELECT p FROM Payment p WHERE p.order.user.id = :userId AND p.status = :status")
     Page<Payment> findByUserIdAndStatus(
             @Param("userId") String userId,
             @Param("status") Payment.PaymentStatus status,

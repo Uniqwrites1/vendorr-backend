@@ -20,7 +20,7 @@ public interface OrderRepository extends JpaRepository<Order, String> {
     
     Page<Order> findByUserIdAndType(String userId, Order.OrderType type, Pageable pageable);
     
-    @Query("SELECT o FROM Order o WHERE o.userId = :userId AND o.type = :type AND o.status = :status")
+    @Query("SELECT o FROM Order o WHERE o.user.id = :userId AND o.type = :type AND o.status = :status")
     Page<Order> findByUserIdAndTypeAndStatus(
             @Param("userId") String userId,
             @Param("type") Order.OrderType type,
